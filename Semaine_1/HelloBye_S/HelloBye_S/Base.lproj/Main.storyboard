@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina3_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="HelloBye_S" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2DB-fW-fwM" userLabel="BonjourButton">
+                                <rect key="frame" x="128" y="225" width="64" height="30"/>
+                                <state key="normal" title="Say Hello"/>
+                                <connections>
+                                    <action selector="BonjourActionButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Rk6-NP-wGY"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LAJ-ON-SkI" userLabel="BonjourLabel">
+                                <rect key="frame" x="160" y="174" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="LAJ-ON-SkI" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-66" id="2Ka-Vh-biJ"/>
+                            <constraint firstItem="LAJ-ON-SkI" firstAttribute="centerX" secondItem="2DB-fW-fwM" secondAttribute="centerX" id="NTW-b3-R1j"/>
+                            <constraint firstItem="2DB-fW-fwM" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="aBL-1E-Lzd"/>
+                            <constraint firstItem="2DB-fW-fwM" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="rys-M3-tzA"/>
+                            <constraint firstItem="LAJ-ON-SkI" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="spq-kc-1cQ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="BonjourButton" destination="2DB-fW-fwM" id="GOZ-7t-Yhb"/>
+                        <outlet property="BonjourLabel" destination="LAJ-ON-SkI" id="Ybp-mN-Nnc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="95.652173913043484" y="27.717391304347828"/>
+        </scene>
+    </scenes>
+</document>
