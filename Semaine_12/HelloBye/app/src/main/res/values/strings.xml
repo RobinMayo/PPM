@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">HelloBye</string>
+
+    <string name="Hello">Hello</string>
+    <string name="Bye">Bye Bye</string>
+    <string name="SayHello">Say Hello</string>
+    <string name="SayBye">Say Bye</string>
+</resources>
