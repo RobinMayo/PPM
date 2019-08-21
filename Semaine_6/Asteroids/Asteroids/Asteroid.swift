@@ -10,27 +10,42 @@ import Foundation
 import UIKit
 
 class Asteroid: NSObject {
-	private static let a1 = UIImageView(image: UIImage(named: "asteroide-100-1"))
-	private static let a2 = UIImageView(image: UIImage(named: "asteroide-100-2"))
-	private static let a3 = UIImageView(image: UIImage(named: "asteroide-100-3"))
-	private static let a4 = UIImageView(image: UIImage(named: "asteroide-100-4"))
-	private static let a21 = UIImageView(image: UIImage(named: "asteroide-120-1"))
-	private static let a22 = UIImageView(image: UIImage(named: "asteroide-120-2"))
-	private static let a23 = UIImageView(image: UIImage(named: "asteroide-120-3"))
-	private static let a24 = UIImageView(image: UIImage(named: "asteroide-120-4"))
-	static let asteroidsA : [UIImageView] = [a1, a2, a3, a4, a21, a22, a23, a24]
+	private static let i1 = UIImage(named: "asteroide-100-1")
+	private static let i2 = UIImage(named: "asteroide-100-2")
+	private static let i3 = UIImage(named: "asteroide-100-3")
+	private static let i4 = UIImage(named: "asteroide-100-4")
+	private static let i21 = UIImage(named: "asteroide-120-1")
+	private static let i22 = UIImage(named: "asteroide-120-2")
+	private static let i23 = UIImage(named: "asteroide-120-3")
+	private static let i24 = UIImage(named: "asteroide-120-4")
+	private static let asteroidsTypes : [UIImage?] = [i1, i2, i3, i4, i21, i22,
+													  i23, i24]
+	public override var description: String {
+		let imageName = imageView.image?.description
+		return "currentImage: \(imageName ?? "imageNotFound") " +
+		"coordinates are (x, y, w, h) : \(x), \(y), \(w), \(h)."
+	}
 	var x : CGFloat
 	var y : CGFloat
 	var w : CGFloat
 	var h : CGFloat
-	//var currentImage : UIImageView
+	let fallSpeed : CGFloat
+	let lateralDeviation : CGFloat
+	var rotationAngle : CGFloat
+	let rotation : CGFloat
+	var imageView : UIImageView
 	
 	override init() {
-		x = 100
+		x = CGFloat.random(in: 0.0...UIScreen.main.bounds.width)
 		y = 0
 		w = 20
 		h = 20
-		//currentImage =
-			//Asteroid.asteroidsA[Int.random(in: 0...Asteroid.asteroidsA.count)]
+		fallSpeed = CGFloat.random(in: 0.5...3)
+		lateralDeviation = CGFloat.random(in: -2.0...2.0)
+		rotation = CGFloat.random(in: -0.1...0.1)
+		rotationAngle = 0
+		let imageIndex = Int.random(in: 0...Asteroid.asteroidsTypes.count - 1)
+		let image = Asteroid.asteroidsTypes[imageIndex]
+		imageView = UIImageView(image: image)
 	}
 }

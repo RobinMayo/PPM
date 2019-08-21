@@ -10,26 +10,20 @@ import UIKit
 import AVFoundation
 
 
-class ViewController: UIViewController /*, UIPickerViewDelegate*/ {
+class ViewController: UIViewController {
 	var gameV : GameView = GameView(frame: UIScreen.main.bounds)
-	var time : Timer = Timer()
-
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.view = gameV
-		
-		//time = Timer.scheduledTimer(timeInterval: TimeInterval(1.0),
-									//target: self,
-									//selector: #selector(self),
-									//userInfo: nil, repeats: true)
 		self.becomeFirstResponder()
 	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
+		
 		if((self.view as? GameView) != nil) {
-			(self.view as! GameView).drawInFormat(format: size)
+			(self.view as! GameView).drawMenu(format: size)
 		} else if((self.view as? ScoreView) != nil) {
 			(self.view as! ScoreView).drawInFormat(format: size)
 		}
