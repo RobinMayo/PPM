@@ -104,7 +104,6 @@ class GameView : UIView {
 		scoreLabel.textAlignment = .center
 		scoreLabel.font = UIFont.boldSystemFont(ofSize: GameView.normalFontSize)
 		scoreLabel.textColor = .white
-		self.addSubview(scoreLabel)
 		
 		// Motion effect :
 		let effectV = UIInterpolatingMotionEffect(keyPath: "center.x",
@@ -166,6 +165,7 @@ class GameView : UIView {
 			scoreButton.removeFromSuperview()
 			prefButton.removeFromSuperview()
 			self.addSubview(exitButton)
+			self.addSubview(scoreLabel)
 			self.addSubview(leftButton)
 			self.addSubview(rightButton)
 			self.addSubview(tieFighter)
@@ -185,15 +185,19 @@ class GameView : UIView {
 	}
 	
 	@objc func goLeft() {
-		let w : Double = Double(UIScreen.main.bounds.width)
-		let x = CGFloat(5.0.truncatingRemainder(dividingBy: w))
-		tieFighter.frame.origin.x -= x
+		let w : CGFloat = CGFloat(UIScreen.main.bounds.width)
+		let x : CGFloat = tieFighter.frame.origin.x - 5.0
+		if x < 0 {
+			tieFighter.frame.origin.x = w + x
+		} else {
+			tieFighter.frame.origin.x = x
+		}
 	}
 	
 	@objc func goRight() {
-		let w : Double = Double(UIScreen.main.bounds.width)
-		let x = CGFloat(5.0.truncatingRemainder(dividingBy: w))
-		tieFighter.frame.origin.x += x
+		let w : CGFloat = CGFloat(UIScreen.main.bounds.width)
+		tieFighter.frame.origin.x = (tieFighter.frame.origin.x + 5.0)
+			.truncatingRemainder(dividingBy: w)
 	}
 	
 	func drawMenu(format : CGSize) {
