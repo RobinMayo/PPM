@@ -12,6 +12,7 @@ import UIKit
 class GameView : UIView {
 	private static let normalFontSize : CGFloat = 17.0
 	private static let largeFontSize : CGFloat = 24.0
+	private let tieFighterY : CGFloat = UIScreen.main.bounds.height - 60.0
 	private let activityIndicator = UIActivityIndicatorView()
 	private var astr : [Asteroid] = []
 	private var time : Timer = Timer()
@@ -26,7 +27,9 @@ class GameView : UIView {
 	private let playButton : UIButton = UIButton(type: .system)
 	private let scoreButton : UIButton = UIButton(type: .system)
 	private let prefButton : UIButton = UIButton(type: .system)
-	private let backButton : UIButton = UIButton(type: .system)
+	private let exitButton : UIButton = UIButton(type: .system)
+	private let leftButton : UIButton = UIButton(type: .system)
+	private let rightButton : UIButton = UIButton(type: .system)
 	
 	// Label :
 	private let scoreLabel : UILabel = UILabel()
@@ -69,14 +72,32 @@ class GameView : UIView {
 							 for: UIControl.Event.touchUpInside)
 		self.addSubview(prefButton)
 		
-		// Back Button :
-		backButton.setTitle(">>>", for: UIControl.State.normal)
-		backButton.tintColor = UIColor.red
-		backButton.titleLabel?.font = UIFont(name: "System",
-											 size: GameView.largeFontSize)
-		backButton.addTarget(self.superview,
+		// Exit Button :
+		exitButton.setTitle("exit", for: UIControl.State.normal)
+		exitButton.tintColor = .white
+		exitButton.titleLabel?.font = UIFont(name: "System",
+											 size: GameView.normalFontSize)
+		exitButton.addTarget(self.superview,
 							 action: #selector(exitGame),
 							 for: UIControl.Event.touchUpInside)
+		
+		// Left Button :
+		leftButton.setTitle("<<<", for: UIControl.State.normal)
+		leftButton.tintColor = UIColor.red
+		leftButton.titleLabel?.font = UIFont.boldSystemFont(
+			ofSize: GameView.normalFontSize)
+		leftButton.addTarget(self.superview,
+							 action: #selector(goLeft),
+							 for: UIControl.Event.allEvents)
+		
+		// Right Button :
+		rightButton.setTitle(">>>", for: UIControl.State.normal)
+		rightButton.tintColor = UIColor.red
+		rightButton.titleLabel?.font = UIFont.boldSystemFont(
+			ofSize: GameView.normalFontSize)
+		rightButton.addTarget(self.superview,
+							 action: #selector(goRight),
+							 for: UIControl.Event.allEvents)
 		
 		// Score Label :
 		scoreLabel.text = printScore()
@@ -123,7 +144,9 @@ class GameView : UIView {
 			ast.imageView.removeFromSuperview()
 		}
 		astr.removeAll()
-		backButton.removeFromSuperview()
+		exitButton.removeFromSuperview()
+		leftButton.removeFromSuperview()
+		rightButton.removeFromSuperview()
 		scoreLabel.removeFromSuperview()
 		tieFighter.removeFromSuperview()
 		self.addSubview(prefButton)
@@ -142,9 +165,14 @@ class GameView : UIView {
 			playButton.removeFromSuperview()
 			scoreButton.removeFromSuperview()
 			prefButton.removeFromSuperview()
-			self.addSubview(backButton)
+			self.addSubview(exitButton)
+			self.addSubview(leftButton)
+			self.addSubview(rightButton)
 			self.addSubview(tieFighter)
 			activityIndicator.stopAnimating()
+			tieFighter.frame.origin.x = (UIScreen.main.bounds.width / 2) -
+				(30.0 / 2)
+			tieFighter.frame.origin.y = tieFighterY
 			print("The game is on")
 		}
 		// Chance a new asteroid appear :
@@ -154,6 +182,18 @@ class GameView : UIView {
 			astr.append(asteroid)
 		}
 		drawGame(format: frame.size)
+	}
+	
+	@objc func goLeft() {
+		let w : Double = Double(UIScreen.main.bounds.width)
+		let x = CGFloat(5.0.truncatingRemainder(dividingBy: w))
+		tieFighter.frame.origin.x -= x
+	}
+	
+	@objc func goRight() {
+		let w : Double = Double(UIScreen.main.bounds.width)
+		let x = CGFloat(5.0.truncatingRemainder(dividingBy: w))
+		tieFighter.frame.origin.x += x
 	}
 	
 	func drawMenu(format : CGSize) {
@@ -191,11 +231,15 @@ class GameView : UIView {
 		let tieWidth : CGFloat = 30.0
 		let tieHeight : CGFloat = 30.0
 		
-		backButton.frame = CGRect(x: rightMargine - elemWidth,
-								  y: h - (margine + elemHeight),
+		exitButton.frame = CGRect(x: (w / 2) - (elemWidth / 2),
+								  y: margine,
 								  width: elemWidth, height: elemHeight)
-		tieFighter.frame = CGRect(x: (w / 2) - (tieWidth / 2),
-								  y: h - (margine + tieHeight),
+		leftButton.frame = CGRect(x: margine, y: h - (margine + elemHeight),
+								  width: elemWidth, height: elemHeight)
+		rightButton.frame = CGRect(x: rightMargine - elemWidth,
+								   y: h - (margine + elemHeight),
+								   width: elemWidth, height: elemHeight)
+		tieFighter.frame = CGRect(x: tieFighter.frame.origin.x, y: tieFighterY,
 								  width: tieWidth, height: tieHeight)
 		for ast in astr {
 			ast.x += ast.lateralDeviation
