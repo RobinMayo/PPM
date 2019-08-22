@@ -19,6 +19,8 @@ class GameView : UIView {
 	
 	static let backgroundImage : UIImageView = UIImageView(
 		image: UIImage(named: "saturn-rings"))
+	let tieFighter : UIImageView = UIImageView(
+		image: UIImage(named: "TIE-fighter"))
 	
 	// Buttons :
 	private let playButton : UIButton = UIButton(type: .system)
@@ -120,11 +122,14 @@ class GameView : UIView {
 		for ast in astr {
 			ast.imageView.removeFromSuperview()
 		}
+		astr.removeAll()
 		backButton.removeFromSuperview()
 		scoreLabel.removeFromSuperview()
+		tieFighter.removeFromSuperview()
 		self.addSubview(prefButton)
 		self.addSubview(scoreButton)
 		self.addSubview(playButton)
+		score = 0
 		print("The game is off")
 		drawMenu(format: frame.size)
 	}
@@ -134,15 +139,16 @@ class GameView : UIView {
 			let asteroid = Asteroid()
 			self.addSubview(asteroid.imageView)
 			astr.append(asteroid)
-			print("The game is on")
 			playButton.removeFromSuperview()
 			scoreButton.removeFromSuperview()
 			prefButton.removeFromSuperview()
 			self.addSubview(backButton)
+			self.addSubview(tieFighter)
 			activityIndicator.stopAnimating()
+			print("The game is on")
 		}
 		// Chance a new asteroid appear :
-		if Int.random(in: 0...1_000) > 970 {
+		if Int.random(in: 0...1_000) > 960 {
 			let asteroid = Asteroid()
 			self.addSubview(asteroid.imageView)
 			astr.append(asteroid)
@@ -182,17 +188,19 @@ class GameView : UIView {
 		let elemWidth : CGFloat = margine * 4
 		let rightMargine : CGFloat = w - margine
 		let elemHeight : CGFloat = 30.0
+		let tieWidth : CGFloat = 30.0
+		let tieHeight : CGFloat = 30.0
 		
 		backButton.frame = CGRect(x: rightMargine - elemWidth,
 								  y: h - (margine + elemHeight),
 								  width: elemWidth, height: elemHeight)
+		tieFighter.frame = CGRect(x: (w / 2) - (tieWidth / 2),
+								  y: h - (margine + tieHeight),
+								  width: tieWidth, height: tieHeight)
 		for ast in astr {
 			ast.x += ast.lateralDeviation
 			ast.y += ast.fallSpeed
 			ast.rotationAngle += ast.rotation
-			
-			ast.imageView.center = CGPoint(x: ast.x + (ast.w / 2),
-										   y: ast.y + (ast.h / 2))
 			ast.imageView.transform = CGAffineTransform(
 				rotationAngle: ast.rotationAngle)
 			
@@ -206,12 +214,49 @@ class GameView : UIView {
 			} else {
 				ast.imageView.frame = CGRect(x: ast.x, y: ast.y,
 											 width: ast.w, height: ast.h)
+				
+				if collision(ofAsteroidFrame: ast.imageView.frame,
+							 withTieFighterFrame: tieFighter.frame) {
+					exitGame()
+				}
 			}
 		}
 		scoreLabel.text = printScore()
 		scoreLabel.frame = CGRect(x: rightMargine - elemWidth,
 								  y: margine,
 								  width: elemWidth, height: elemHeight)
+	}
+	
+	func collision(ofAsteroidFrame asteroid : CGRect,
+				   withTieFighterFrame tie : CGRect) -> Bool {
+		let ignoringSpace : CGFloat = 2.0
+		let tieMinX : CGFloat = tie.minX + ignoringSpace
+		let tieMinY : CGFloat = tie.minY + ignoringSpace
+		let tieMaxX : CGFloat = tie.maxX - ignoringSpace
+		let tieMaxY : CGFloat = tie.maxY - ignoringSpace
+		let asteroidIsOnTheLeft : Bool 	= asteroid.maxX < tieMinX
+		let asteroidIsOnTheRight : Bool = asteroid.minX > tieMaxX
+		let asteroidIsOnTheTop : Bool 	= asteroid.maxY > tieMinY
+		let asteroidIsBelow : Bool 		= asteroid.minY < tieMaxY
+		let asteroidIsOnTieLine : Bool =
+			(asteroid.minY >= tieMinY && asteroid.minY <= tieMaxY) ||
+			(asteroid.maxY >= tieMinY && asteroid.maxY <= tieMaxY)
+		let asteroidIsOnTieColumn : Bool =
+			(asteroid.minX >= tieMinX && asteroid.minX <= tieMaxX) ||
+			(asteroid.maxX >= tieMinX && asteroid.maxX <= tieMaxX)
+		
+		if asteroidIsOnTieLine {
+//			print("asteroidIsOnTieLine : \(asteroidIsOnTieLine)")
+//			print("asteroid : \(asteroid.minX), \(asteroid.minY), \(asteroid.maxX), \(asteroid.maxY) "
+//				+ "tie : \(tieMinX), \(tieMinY), \(tieMaxX), \(tieMaxY)")
+			return !(asteroidIsOnTheRight || asteroidIsOnTheLeft)
+		} else if asteroidIsOnTieColumn {
+//			print("asteroidIsOnTieColumn : \(asteroidIsOnTieColumn)")
+//			print("asteroid : \(asteroid.minX), \(asteroid.minY), \(asteroid.maxX), \(asteroid.maxY) "
+//				+ "tie : \(tieMinX), \(tieMinY), \(tieMaxX), \(tieMaxY)")
+			return !(asteroidIsOnTheTop || asteroidIsBelow)
+		}
+		return false
 	}
 	
 	func printScore() -> String {
